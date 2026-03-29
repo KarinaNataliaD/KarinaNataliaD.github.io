@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Karina De Santiago — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #faf9f7;
+      --surface:   #f3f0ec;
+      --border:    #e5dfd9;
+      --rose:      #b8878f;
+      --rose-lt:   #e8d4d6;
+      --rose-xlt:  #f7f0f1;
+      --ink:       #1c1917;
+      --ink-2:     #4a453f;
+      --ink-3:     #8c847c;
+      --radius:    14px;
+      --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--rose-lt); border-radius: 99px; }
+
+    /* ── SELECTION ── */
+    ::selection { background: var(--rose-lt); color: var(--rose); }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 60px;
+      background: rgba(250,249,247,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid transparent;
+      transition: border-color var(--transition);
+    }
+    nav.scrolled { border-color: var(--border); }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--rose); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.825rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-2);
+      text-decoration: none;
+      position: relative;
+      transition: color var(--transition);
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--rose);
+      transition: width var(--transition);
+    }
+    .nav-links a:hover { color: var(--rose); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-cta {
+      background: var(--ink);
+      color: var(--bg) !important;
+      padding: 9px 22px;
+      border-radius: 99px;
+      transition: background var(--transition), color var(--transition) !important;
+    }
+    .nav-cta:hover { background: var(--rose) !important; color: white !important; }
+    .nav-cta::after { display: none !important; }
+
+    /* ── SECTIONS ── */
+    section { padding: 120px 60px; max-width: 1200px; margin: 0 auto; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 140px;
+      max-width: 1200px;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.2s forwards;
+    }
+    .hero-tag::before {
+      content: '';
+      display: block;
+      width: 28px; height: 1px;
+      background: var(--rose);
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.2rem, 7vw, 6rem);
+      font-weight: 500;
+      line-height: 1.08;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 12px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.35s forwards;
+    }
+    h1 em {
+      font-style: italic;
+      color: var(--rose);
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-weight: 300;
+      color: var(--ink-2);
+      max-width: 560px;
+      margin-bottom: 52px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.5s forwards;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.65s forwards;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--ink);
+      color: var(--bg);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 14px 32px;
+      border-radius: 99px;
+      text-decoration: none;
+      transition: background var(--transition), transform 0.2s;
+    }
+    .btn-primary:hover { background: var(--rose); transform: translateY(-2px); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--ink-2);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 14px 28px;
+      border-radius: 99px;
+      transition: border-color var(--transition), color var(--transition), transform 0.2s;
+    }
+    .btn-secondary:hover {
+      border-color: var(--rose);
+      color: var(--rose);
+      transform: translateY(-2px);
+    }
+
+    .hero-socials {
+      position: fixed;
+      left: 30px;
+      bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      z-index: 50;
+      opacity: 0;
+      animation: fadeIn 0.8s 1.2s forwards;
+    }
+    .hero-socials::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 60px;
+      background: var(--border);
+    }
+    .social-icon {
+      color: var(--ink-3);
+      text-decoration: none;
+      transition: color var(--transition), transform 0.2s;
+      display: flex;
+    }
+    .social-icon:hover { color: var(--rose); transform: translateY(-2px); }
+    .social-icon svg { width: 18px; height: 18px; }
+
+    /* ── HERO DECO ── */
+    .hero-deco {
+      position: absolute;
+      right: 60px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      opacity: 0;
+      animation: fadeIn 1s 0.9s forwards;
+      pointer-events: none;
+    }
+    .deco-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--rose-lt);
+    }
+    .deco-dot.filled { background: var(--rose); }
+
+    /* ── SECTION HEADER ── */
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 20px;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 32px; height: 1px;
+      background: var(--rose);
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 500;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      font-size: 1rem;
+      color: var(--ink-2);
+      max-width: 480px;
+      font-weight: 300;
+      margin-bottom: 64px;
+    }
+
+    /* ── PROJECTS ── */
+    #projects { padding-top: 100px; }
+
+    .projects-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .project-card {
+      border-top: 1px solid var(--border);
+      padding: 56px 0;
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      gap: 40px;
+      align-items: start;
+      cursor: default;
+      transition: background var(--transition);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease, background 0.3s ease;
+    }
+    .project-card:last-child { border-bottom: 1px solid var(--border); }
+    .project-card.visible { opacity: 1; transform: translateY(0); }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; top: 0; bottom: 0;
+      background: var(--rose-xlt);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+      z-index: 0;
+    }
+    .project-card:hover::before { transform: scaleX(1); }
+
+    .project-card > * { position: relative; z-index: 1; }
+
+    .project-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem;
+      font-weight: 300;
+      color: var(--rose-lt);
+      line-height: 1;
+      transition: color var(--transition);
+    }
+    .project-card:hover .project-num { color: var(--rose); }
+
+    .project-body {}
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 99px;
+      background: var(--surface);
+      color: var(--ink-3);
+      border: 1px solid var(--border);
+      transition: background var(--transition), color var(--transition), border-color var(--transition);
+    }
+    .project-card:hover .tag {
+      background: var(--rose-lt);
+      color: var(--rose);
+      border-color: var(--rose-lt);
+    }
+
+    .project-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+      line-height: 1.2;
+      transition: color var(--transition);
+    }
+    .project-card:hover .project-title { color: var(--rose); }
+
+    .project-org {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-bottom: 16px;
+    }
+
+    .project-desc {
+      font-size: 0.95rem;
+      color: var(--ink-2);
+      line-height: 1.75;
+      font-weight: 300;
+      max-width: 600px;
+      margin-bottom: 20px;
+    }
+
+    .project-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .project-bullets li {
+      display: flex;
+      gap: 12px;
+      font-size: 0.875rem;
+      color: var(--ink-2);
+      font-weight: 300;
+      line-height: 1.65;
+    }
+    .project-bullets li::before {
+      content: '✦';
+      color: var(--rose);
+      font-size: 0.6rem;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    .project-link {
+      flex-shrink: 0;
+      margin-top: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 10px 20px;
+      border-radius: 99px;
+      white-space: nowrap;
+      transition: border-color var(--transition), color var(--transition), transform 0.2s;
+    }
+    .project-link:hover {
+      border-color: var(--rose);
+      color: var(--rose);
+      transform: translateY(-2px);
+    }
+    .project-link svg { width: 14px; height: 14px; }
+
+    /* ── ABOUT ── */
+    #about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-image-wrap {
+      position: relative;
+    }
+    .about-image-placeholder {
+      width: 100%;
+      aspect-ratio: 4/5;
+      background: var(--surface);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--ink-3);
+      font-size: 0.8rem;
+      text-align: center;
+      padding: 20px;
+    }
+    .about-image-placeholder svg { opacity: 0.3; width: 40px; height: 40px; }
+    .about-deco-ring {
+      position: absolute;
+      bottom: -20px;
+      right: -20px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 1px solid var(--rose-lt);
+      z-index: -1;
+    }
+    .about-deco-dot {
+      position: absolute;
+      top: -12px;
+      left: -12px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--rose-lt);
+    }
+
+    .about-content {}
+    .about-text {
+      font-size: 1rem;
+      color: var(--ink-2);
+      font-weight: 300;
+      line-height: 1.85;
+      margin-bottom: 32px;
+    }
+    .about-text strong { color: var(--ink); font-weight: 600; }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .skill-item {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--ink-2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .skill-item::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--rose);
+      flex-shrink: 0;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      text-align: center;
+      padding: 100px 60px 120px;
+    }
+    .contact-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .contact-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .contact-title em { font-style: italic; color: var(--rose); }
+    .contact-subtitle {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--ink-2);
+      margin-bottom: 44px;
+    }
+    .contact-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 36px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .footer-logo span { color: var(--rose); }
+    .footer-copy {
+      font-size: 0.78rem;
+      color: var(--ink-3);
+      font-weight: 300;
+    }
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+    .footer-links a {
+      font-size: 0.78rem;
+      color: var(--ink-3);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .footer-links a:hover { color: var(--rose); }
+
+    /* ── DIVIDER ── */
+    .rose-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 20px 60px;
+      color: var(--rose-lt);
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+    }
+    .rose-divider::before,
+    .rose-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 20px 30px; }
+      section { padding: 80px 30px; }
+      #hero { padding: 140px 30px 80px; }
+      .hero-deco { display: none; }
+      .hero-socials { display: none; }
+      .project-card { grid-template-columns: 50px 1fr; }
+      .project-link { grid-column: 1 / -1; }
+      #about { grid-template-columns: 1fr; }
+      .about-image-wrap { display: none; }
+      #contact { padding: 80px 30px; }
+      footer { padding: 30px; flex-direction: column; gap: 16px; text-align: center; }
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 18px 20px; }
+      .nav-links { gap: 20px; }
+      section { padding: 70px 20px; }
+      #hero { padding: 130px 20px 60px; }
+      .project-card { grid-template-columns: 1fr; gap: 20px; }
+      .project-num { font-size: 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVIGATION ── -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-logo">Karina De Santiago<span></span></a>
+    <ul class="nav-links">
+      <li><a href="#projects">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="https://docs.google.com/document/d/1kaYnc05YBUfYX8MLVjQmit3Lw2bCDsvP/edit?usp=sharing&ouid=115353127303990027536&rtpof=true&sd=true" target="_blank" class="nav-cta">Resume ↗</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── SOCIAL SIDEBAR ── -->
+  <div class="hero-socials">
+    <!-- GitHub -->
+    <a href="https://github.com/KarinaNataliaD" target="_blank" class="social-icon" aria-label="GitHub">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+      </svg>
+    </a>
+    <!-- LinkedIn -->
+    <a href="https://linkedin.com/in/karina-desantiago" target="_blank" class="social-icon" aria-label="LinkedIn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+        <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
+      </svg>
+    </a>
+    <!-- Email -->
+    <a href="mailto:karinaanatalia@gmail.com" class="social-icon" aria-label="Email">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+    </a>
+  </div>
+
+  <!-- ── HERO ── -->
+  <section id="hero" style="position:relative;">
+    <p class="hero-tag">Software Engineer · CS @ DePaul University</p>
+    <h1>Building things<br/>that <em>matter</em>.</h1>
+    <p class="hero-sub">
+      I'm a software engineer with a passion for building thoughtful, impactful products — from AI-powered platforms to full-stack web experiences.
+    </p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn-primary">
+        View My Work
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+      <a href="mailto:karinaanatalia@gmail.com" class="btn-secondary">
+        Get in Touch
+      </a>
+    </div>
+
+    <!-- decorative dot grid -->
+    <div class="hero-deco" style="position:absolute;">
+      <!-- 5x7 dot grid -->
+      <div class="deco-dot filled"></div><div class="deco-dot"></div><div class="deco-dot filled"></div><div class="deco-dot"></div><div class="deco-dot"></div>
+      <div class="deco-dot"></div><div class="deco-dot"></div><div class="deco-dot"></div><div class="deco-dot filled"></div><div class="deco-dot"></div>
+      <div class="deco-dot"></div><div class="deco-dot filled"></div><div class="deco-dot"></div><div class="deco-dot"></div><div class="deco-dot filled"></div>
+      <div class="deco-dot filled"></div><div class="deco-dot"></div><div class="deco-dot"></div><div class="deco-dot filled"></div><div class="deco-dot"></div>
+      <div class="deco-dot"></div><div class="deco-dot"></div><div class="deco-dot filled"></div><div class="deco-dot"></div><div class="deco-dot"></div>
+      <div class="deco-dot"></div><div class="deco-dot filled"></div><div class="deco-dot"></div><div class="deco-dot"></div><div class="deco-dot filled"></div>
+      <div class="deco-dot filled"></div><div class="deco-dot"></div><div class="deco-dot"></div><div class="deco-dot filled"></div><div class="deco-dot"></div>
+    </div>
+  </section>
+
+  <div class="rose-divider">✦ &nbsp; selected work &nbsp; ✦</div>
+
+  <!-- ── PROJECTS ── -->
+  <section id="projects" style="padding-top: 60px;">
+    <p class="section-label">Projects</p>
+    <h2 class="section-title">Work I'm proud of.</h2>
+    <p class="section-desc">A selection of projects spanning web development, data engineering, and AI systems.</p>
+
+    <div class="projects-grid">
+
+      <!-- PROJECT 1 - FIEN FOUNDATION  -->
+      <div class="project-card">
+        <div class="project-num">01</div>
+        <div class="project-body">
+          <div class="project-tags">
+            <span class="tag">Web Development</span>
+            <span class="tag">Nonprofit</span>
+            <span class="tag">Internship</span>
+          </div>
+          <h3 class="project-title">FIEN Foundation Website</h3>
+          <p class="project-org">FIEN Foundation · Internship</p>
+          <p class="project-desc">
+            Designed and developed a full website for the FIEN Foundation, a nonprofit organization, as part of my internship. Built with a focus on accessibility, clear communication, and a compelling digital presence to support their mission.
+          </p>
+          <ul class="project-bullets">
+            <li>Architected and launched a complete web presence for a nonprofit organization from the ground up</li>
+            <li>Focused on accessibility, performance, and communicating the foundation's mission effectively</li>
+            <li>Delivered a polished, production-ready site within an internship timeline</li>
+          </ul>
+        </div>
+        <a href="[FIEN_WEBSITE_URL]" target="_blank" class="project-link">
+          Visit Site
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+
+      <!-- PROJECT 2 BIRTHDAY MESSAGING -->
+<div class="project-card">
+  <div class="project-num">02</div>
+  <div class="project-body">
+    <div class="project-tags">
+      <span class="tag">Full-Stack</span>
+      <span class="tag">Web Development</span>
+      <span class="tag">UI/UX</span>
+    </div>
+    <h3 class="project-title">BirthdayMessaging.io Websites</h3>
+    <p class="project-org">BirthdayMessaging.io · Web Development</p>
+    <p class="project-desc">
+      Contributed to the development of web properties for Birthday Messaging, building and refining user-facing features that support a seamless digital experience for their audience.
+    </p>
+    <ul class="project-bullets">
+      <li>Developed and maintained multiple web pages with a focus on clean, responsive UI</li>
+      <li>Implemented user experience improvements to drive engagement and usability</li>
+      <li>Collaborated on iterative feature development across the platform</li>
+    </ul>
+  </div>
+  <div style="display:flex; flex-direction:column; gap:10px;">
+    <a href="https://www.birthdaymessaging.io/" target="_blank" class="project-link">
+      Site One
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    </a>
+    <a href="https://www.birthdaymessaging.com/" target="_blank" class="project-link">
+      Site Two
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    </a>
+  </div>
+</div>
+
+      <!-- PROJECT 3 -->
+      <div class="project-card">
+        <div class="project-num">03</div>
+        <div class="project-body">
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">Data Engineering</span>
+            <span class="tag">Esports Analytics</span>
+          </div>
+          <h3 class="project-title">Call of Duty AI Performance Analyzer</h3>
+          <p class="project-org">Esports Analytics · Personal Project</p>
+          <p class="project-desc">
+            Built a comprehensive performance analysis tool for a professional Call of Duty esports team, processing game data to surface strategic insights and track team trends over time.
+          </p>
+          <ul class="project-bullets">
+            <li>Developed a performance analysis tool for a professional CoD esports team using Python</li>
+            <li>Implemented data processing algorithms to analyze KD ratios and wave-by-wave hold success metrics</li>
+            <li>Built an analytics dashboard to visualize team performance trends and strategic insights in real time</li>
+          </ul>
+        </div>
+        <a href="https://github.com/[YOUR_GITHUB]/[COD_REPO]" target="_blank" class="project-link">
+          GitHub
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        </a>
+      </div>
+
+      <!-- PROJECT 4 -->
+      <div class="project-card">
+        <div class="project-num">04</div>
+        <div class="project-body">
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">FastAPI</span>
+            <span class="tag">LLM / AI</span>
+            <span class="tag">Capstone</span>
+          </div>
+          <h3 class="project-title">AI-Powered Exam Generation & Grading System</h3>
+          <p class="project-org">DePaul University · Senior Capstone · Together.AI · SQLAlchemy</p>
+          <p class="project-desc">
+            Designed and built an end-to-end AI-powered exam platform that dynamically generates questions, evaluates student responses, and delivers rubric-based feedback — scaling from elementary through college-level content.
+          </p>
+          <ul class="project-bullets">
+            <li>Developed an LLM-powered platform that dynamically creates questions, evaluates responses, and delivers rubric-based feedback</li>
+            <li>Designed and iteratively refined prompt templates to improve grading accuracy, enforce structured JSON responses, and reduce default scoring bias</li>
+            <li>Implemented grade-level adaptive question generation, enabling exams to scale from elementary through college-level learners</li>
+            <li>Built backend services using FastAPI, Python, SQLAlchemy, and SQLite — managing exam workflows, grading pipelines, and database persistence</li>
+            <li>Implemented robust LLM response parsing and error-handling strategies to manage inconsistent model outputs</li>
+            <li>Integrated adaptive follow-up question generation, allowing students to expand incomplete answers before final grading</li>
+          </ul>
+        </div>
+        <a href="https://github.com/[YOUR_GITHUB]/[CAPSTONE_REPO]" target="_blank" class="project-link">
+          GitHub
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="rose-divider">✦</div>
+
+  <!-- ── ABOUT ── -->
+  <section id="about">
+    <img src="Karina-NYSL.jpeg" alt="[Your Name]" style="width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:20px; border:1px solid var(--border);" />
+      <div class="about-deco-ring"></div>
+      <div class="about-deco-dot"></div>
+    </div>
+    <div class="about-content">
+      <p class="section-label">About</p>
+      <h2 class="section-title">A little about me.</h2>
+      <p class="about-text">
+        I'm a <strong>software engineer and Computer Science graduate from DePaul University</strong> with hands-on experience building everything from nonprofit websites to AI-powered academic platforms.
+      </p>
+      <p class="about-text">
+        I love working at the intersection of <strong>thoughtful design and strong engineering</strong> ♡ building software that's not just <strong>functional</strong>,but <strong> meaningful.</strong> Whether I'm wrangling LLM outputs, designing data pipelines, or crafting a front-end experience, I bring the same level of care and attention to detail.
+      </p>
+
+      <div class="skills-grid">
+        <span class="skill-item">Python</span>
+        <span class="skill-item">JavaScript</span>
+        <span class="skill-item">FastAPI</span>
+        <span class="skill-item">React</span>
+        <span class="skill-item">SQLAlchemy / SQLite</span>
+        <span class="skill-item">Together.AI / LLMs</span>
+        <span class="skill-item">Data Analysis</span>
+        <span class="skill-item">REST APIs</span>
+        <span class="skill-item">HTML & CSS</span>
+        <span class="skill-item">Git / GitHub</span>
+      </div>
+
+      <a href="https://docs.google.com/document/d/1kaYnc05YBUfYX8MLVjQmit3Lw2bCDsvP/edit?usp=sharing&ouid=115353127303990027536&rtpof=true&sd=true" target="_blank" class="btn-secondary" style="width:fit-content;">
+        Download Résumé
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section id="contact" style="max-width:1200px; margin:0 auto;">
+    <div class="contact-inner">
+      <p class="section-label" style="justify-content:center;">Contact</p>
+      <h2 class="contact-title">Let's work<br/><em>together.</em></h2>
+      <p class="contact-subtitle">
+        Open to full-time software engineering roles, internships, and freelance projects. Let's build something great.
+      </p>
+      <div class="contact-actions">
+        <a href="mailto:karinaanatalia@gmail.com" class="btn-primary">
+          Say Hello
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+        <a href="https://linkedin.com/in/karina-desantiago" target="_blank" class="btn-secondary">
+          LinkedIn ↗
+        </a>
+        <a href="https://github.com/KarinaNataliaD" target="_blank" class="btn-secondary">
+          GitHub ↗
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <a href="#hero" class="footer-logo">Karina De Santiago<span></span></a>
+    <p class="footer-copy">© 2026 · Designed & built with care - Karina ✦</p>
+    <ul class="footer-links">
+      <li><a href="#projects">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </footer>
+
+  <script>
+    // ── NAV scroll state
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // ── Scroll-triggered project card reveals
+    const cards = document.querySelectorAll('.project-card');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    cards.forEach(card => observer.observe(card));
+
+    // ── Smooth nav link scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(anchor.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+
+</body>
+</html>
